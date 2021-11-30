@@ -1,2 +1,3 @@
-# Steerable-E3-GNN
-E(3) Steerable Graph Neural Network
+# E(3) Steerable GNN
+
+Test
