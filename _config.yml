@@ -1,0 +1,6 @@
+theme: jekyll-theme-cayman
+repository: ml-jku/align-rudder-blog
+kramdown:
+  math_engine: mathjax
+github: [metadata]
+
