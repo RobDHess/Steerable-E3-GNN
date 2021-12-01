@@ -6,7 +6,7 @@ This repo containst the code and experiments for the paper
 ![](https://github.com/RobDHess/Steerable-E3-GNN/blob/main/assets/forward_pass_faster_larger.gif)
 
 
-If you use this code in your work, please cite us:
+The codebase was created by Johannes Brandstetter, Rob Hesselink and Erik Bekkers. If you use this code in your work, please cite us:
 
 ```bibtex
 @article{brandstetter2021geometric,
