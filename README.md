@@ -79,19 +79,8 @@ python3 main.py --dataset=nbody --epochs=1000 --max_samples=3000 --model=seconv 
 
 To run the SEGNN, use 
 ```bash
-python3 main.py --dataset=gravity --epochs=1000 --max_samples=3000 --model=segnn --lmax_h=1 --lmax_attr=1 --layers=4 --hidden_features=64 --subspace_type=weightbalanced --norm=none --batch_size=100 --gpu=1 --weight_decay=1e-12 
+python3 main.py --dataset=gravity --epochs=1000 --max_samples=10000 --model=segnn --lmax_h=1 --lmax_attr=1 --layers=4 --hidden_features=64 --subspace_type=weightbalanced --norm=none --batch_size=100 --gpu=1 --weight_decay=1e-12 
 ```
-
-To run the linear SEConv, use
-```bash
-python3 main.py --dataset=gravity --epochs=1000 --max_samples=3000 --model=seconv --lmax_h=1 --lmax_attr=1 --layers=4 --hidden_features=80 --subspace_type=weightbalanced --conv_type=linear --norm=instance --batch_size=100 --gpu=1 --weight_decay=1e-12 
-```
-
-To run the non-linear SEConv, use
-```bash
-python3 main.py --dataset=gravity --epochs=1000 --max_samples=3000 --model=seconv --lmax_h=1 --lmax_attr=1 --layers=4 --hidden_features=64 --subspace_type=weightbalanced --conv_type=nonlinear --norm=instance --batch_size=100 --gpu=1 --weight_decay=1e-12 
-```
-
 #### Timing experiments
 For QM9, please run the following, using further model specifications. The warmup period allows for the warmup of CUDA kernels. 
 ```bash
