@@ -62,12 +62,6 @@ if __name__ == "__main__":
     parser.add_argument('--feature_type', type=str, default="one_hot",
                         help='Type of input feature: one-hot, or Cormorants charge thingy')
 
-    # Nbody parameters:
-    parser.add_argument('--nbody_name', type=str, default="nbody_small",
-                        help='Name of nbody data [nbody, nbody_small]')
-    parser.add_argument('--max_samples', type=int, default=3000,
-                        help='Maximum number of samples in nbody dataset')
-
     # Model parameters
     parser.add_argument('--model', type=str, default="segnn",
                         help='Model name')
