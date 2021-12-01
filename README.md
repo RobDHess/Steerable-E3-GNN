@@ -41,6 +41,16 @@ This code allows for running three experiments mentioned in the paper:
 * Nbody (charged): Predicting particle trajectories of 5 particles under electrical force
 * Nbody (gravity): Predicting particle trajectories of 100 particles under gravitational force
 
+#### Creating N-Body data
+To recreate the datasets used in this work, navigate to ```nbody/dataset/``` and run either
+```bash
+python3 -u generate_dataset.py --simulation=charged --num-train 10000 --seed 43 --suffix small
+```
+or 
+```bash
+python3 -u generate_dataset.py --simulation=gravity --num-train 10000 --seed 43 --suffix small
+```
+
 #### QM9
 To run the QM9 experiments, adapt target, lmax_h, lmax_attr and radius.
 ```bash
@@ -48,7 +58,6 @@ python3 main.py --dataset=qm9 --epochs=1000 --target=alpha --radius=2 --model=se
 ```
 
 #### N-Body (charged):
-
 To run the SEGNN, use 
 ```bash
 python3 main.py --dataset=nbody --epochs=1000 --max_samples=3000 --model=segnn --lmax_h=1 --lmax_attr=1 --layers=4 --hidden_features=64 --subspace_type=weightbalanced --norm=none --batch_size=100 --gpu=1 --weight_decay=1e-12 
