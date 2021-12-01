@@ -1,10 +1,8 @@
 .DS_Store
 __pycache__/
 /datasets/
-*.pyc
 /wandb/
-slurm*
 /saved models/
-.ipynb_checkpoints/
+*.pyc
 *.npy
 *.log
