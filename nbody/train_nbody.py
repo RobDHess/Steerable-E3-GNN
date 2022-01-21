@@ -15,6 +15,8 @@ from nbody.dataset_nbody import NBodyDataset
 
 time_exp_dic = {'time': 0, 'counter': 0}
 
+torch.manual_seed(42)
+
 
 class O3Transform:
     def __init__(self, lmax_attr):
@@ -47,6 +49,8 @@ def train(gpu, model, args):
     else:
         device = torch.device('cuda:' + str(gpu))
 
+    model = model.to(device)
+
     dataset_train = NBodyDataset(partition='train', dataset_name=args.nbody_name,
                                  max_samples=args.max_samples)
     loader_train = torch.utils.data.DataLoader(dataset_train, batch_size=args.batch_size, shuffle=True, drop_last=True)
@@ -73,14 +77,14 @@ def train(gpu, model, args):
     for epoch in range(0, args.epochs):
         train_loss = run_epoch(model, optimizer, loss_mse, epoch, loader_train, transform, device, args)
         if args.log and gpu == 0:
-            wandb.log({"Train loss": train_loss})
+            wandb.log({"Train MSE": train_loss})
         if epoch % args.test_interval == 0 or epoch == args.epochs-1:
             #train(epoch, loader_train, backprop=False)
             val_loss = run_epoch(model, optimizer, loss_mse, epoch, loader_val, transform, device, args, backprop=False)
             test_loss = run_epoch(model, optimizer, loss_mse, epoch, loader_test,
                                   transform, device, args, backprop=False)
             if args.log and gpu == 0:
-                wandb.log({"Val loss": val_loss})
+                wandb.log({"Val MSE": val_loss})
             if val_loss < best_val_loss:
                 best_val_loss = val_loss
                 best_test_loss = test_loss
@@ -89,7 +93,7 @@ def train(gpu, model, args):
                   (best_val_loss, best_test_loss, best_epoch))
 
     if args.log and gpu == 0:
-        wandb.log({"Test loss": best_test_loss})
+        wandb.log({"Test MSE": best_test_loss})
     return best_val_loss, best_test_loss, best_epoch
 
 
@@ -100,15 +104,17 @@ def run_epoch(model, optimizer, criterion, epoch, loader, transform, device, arg
         model.eval()
 
     res = {'epoch': epoch, 'loss': 0, 'counter': 0}
+    n_nodes = 5
+    batch_size = args.batch_size
+
+    edges = loader.dataset.get_edges(args.batch_size, n_nodes)
+    edges = [edges[0], edges[1]]
+    edge_index = torch.stack(edges)
 
     for batch_idx, data in enumerate(loader):
-        batch_size, n_nodes, _ = data[0].size()
         data = [d.to(device) for d in data]
         data = [d.view(-1, d.size(2)) for d in data]
         loc, vel, edge_attr, charges, loc_end = data
-
-        edges = loader.dataset.get_edges(batch_size, n_nodes)
-        edges = [edges[0], edges[1]]
 
         optimizer.zero_grad()
 
@@ -117,14 +123,14 @@ def run_epoch(model, optimizer, criterion, epoch, loader, transform, device, arg
             t1 = time.time()
 
         if args.model == 'segnn' or args.model == 'seconv':
-            graph = Data(edge_index=torch.stack(edges), pos=loc, vel=vel, charges=charges, y=loc_end)
+            graph = Data(edge_index=edge_index, pos=loc, vel=vel, charges=charges, y=loc_end)
             batch = torch.arange(0, batch_size)
             graph.batch = batch.repeat_interleave(n_nodes).long()
-            graph = transform(graph)  # Add O3 attributes
             graph = graph.to(device)
-            loc_pred = model(graph)
+            graph = transform(graph)  # Add O3 attributes
+            loc_pred = graph.pos + model(graph)
         else:
-            raise Exception("Wrong model")
+            raise Exception("Unknown model")
 
         if args.time_exp:
             torch.cuda.synchronize()
