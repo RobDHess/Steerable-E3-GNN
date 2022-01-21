@@ -76,14 +76,14 @@ def train(gpu, model, args):
     for epoch in range(0, args.epochs):
         train_loss = run_epoch(model, optimizer, loss_mse, epoch, loader_train, transform, device, args)
         if args.log and gpu == 0:
-            wandb.log({"Train loss": train_loss})
+            wandb.log({"Train MSE": train_loss})
         if epoch % args.test_interval == 0 or epoch == args.epochs-1:
             #train(epoch, loader_train, backprop=False)
             val_loss = run_epoch(model, optimizer, loss_mse, epoch, loader_val, transform, device, args, backprop=False)
             test_loss = run_epoch(model, optimizer, loss_mse, epoch, loader_test,
                                   transform, device, args, backprop=False)
             if args.log and gpu == 0:
-                wandb.log({"Val loss": val_loss})
+                wandb.log({"Val MSE": val_loss})
             if val_loss < best_val_loss:
                 best_val_loss = val_loss
                 best_test_loss = test_loss
@@ -92,7 +92,7 @@ def train(gpu, model, args):
                   (best_val_loss, best_test_loss, best_epoch))
 
     if args.log and gpu == 0:
-        wandb.log({"Test loss": best_test_loss})
+        wandb.log({"Test MSE": best_test_loss})
     return best_val_loss, best_test_loss, best_epoch
 
 
