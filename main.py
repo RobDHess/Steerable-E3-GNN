@@ -74,8 +74,6 @@ if __name__ == "__main__":
     # Model parameters
     parser.add_argument('--model', type=str, default="segnn",
                         help='Model name')
-    parser.add_argument('--init', type=str, default="kaiming_uniform",
-                        help='Initialisation of O3TensorProduct')
     parser.add_argument('--hidden_features', type=int, default=128,
                         help='max degree of hidden rep')
     parser.add_argument('--lmax_h', type=int, default=2,
@@ -154,7 +152,6 @@ if __name__ == "__main__":
                       norm=args.norm,
                       pool=args.pool,
                       task=task,
-                      init=args.init,
                       additional_message_irreps=additional_message_irreps)
         args.ID = "_".join([args.model, args.dataset, args.target, str(np.random.randint(1e4, 1e5))])
     elif args.model == "seconv":
@@ -168,7 +165,6 @@ if __name__ == "__main__":
                        norm=args.norm,
                        pool=args.pool,
                        task=task,
-                       init=args.init,
                        additional_message_irreps=additional_message_irreps,
                        conv_type=args.conv_type)
         args.ID = "_".join([args.model, args.conv_type, args.dataset, str(np.random.randint(1e4, 1e5))])
