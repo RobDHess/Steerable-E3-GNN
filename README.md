@@ -27,11 +27,12 @@ SEGNN is an E(3) steerable graph neural network. It can incorporate vector or te
 
 
 ## Dependencies
-We have added a bash script that can install the environment we ran our code in. Please mind that the script rarely works and it's best to copy-paste individual lines. Dependencies include:
-* Python 3.8+
-* [PyTorch](https://pytorch.org/) 1.9.0+
+The repository contains an exported conda environment (```environment.yml```), which you can use to install all dependencies.
+Dependencies include:
+* Python 
+* [PyTorch](https://pytorch.org/) 
 * [PyTorch Geometric](https://pytorch-geometric.readthedocs.io/en/latest/)
-* [E3NN](https://e3nn.org/) 0.4.2+
+* [E3NN](https://e3nn.org/) 
 * [Weights & Biases](https://wandb.ai/site) 
 
 
