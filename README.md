@@ -1,7 +1,7 @@
 # E(3) Steerable GNN
 
 This repo containst the code and experiments for the paper
-[Geometric and Physical Quantities improve E(3) Equivariant Message Passing](https://arxiv.org/abs/2110.02905) by Johannes Brandstetter, Rob Hesselink, Elise van der Pol, Erik Bekkers and Max Welling
+[Geometric and Physical Quantities improve E(3) Equivariant Message Passing](https://arxiv.org/abs/2110.02905) by Johannes Brandstetter, Rob Hesselink, Elise van der Pol, Erik Bekkers and Max Welling. 
 
 ![](https://github.com/RobDHess/Steerable-E3-GNN/blob/main/assets/forward_pass_faster_larger.gif)
 
@@ -18,6 +18,8 @@ The codebase was created by Johannes Brandstetter, Rob Hesselink and Erik Bekker
       primaryClass={cs.LG}
 }
 ```
+
+We have also created an accompanying [blog post](https://robdhess.github.io/Steerable-E3-GNN/), which explains some of the concepts behind the SEGNN in more detail than we could afford in the paper. 
 
 ## SEGNN
 SEGNN is an E(3) steerable graph neural network. It can incorporate vector or tensor-valued information to send directional information, while remaining equivariant to E(3) transformations. We have tried to make the implementation general, so that you may easily apply SEGNN to your data.
