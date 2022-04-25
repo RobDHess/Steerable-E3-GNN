@@ -206,11 +206,10 @@ We hope that SEGNNs grow to be a viable model on many tasks, not merely on molec
 
 
 # Material
-If after you've read this, you find yourself hungry for more, we also have a Colab available. That way, you can try out working with SEGNNs yourself!
+If after you've read this, you find yourself hungry for more, please check out our github repository where you can find the SEGNN implementation and apply it to your data.
 
-[Paper](https://arxiv.org/abs/2110.02905)
 [Github](https://github.com/RobDHess/Steerable-E3-GNN)
-
+[Paper](https://arxiv.org/abs/2110.02905)
 
 
 #### Correspondence
