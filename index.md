@@ -24,7 +24,7 @@ In this blog post we focus on point 1 and point 2. Point 3 is discussed at lengt
 
 # Credit
 
-Before we continue, we must give credit where it's due: much of the mathematics we present here has been worked out previously. Our implementation of Steerable E(3) Equivariant Graph Neural Networks (SEGNNs) is built on the excellent [e3nn](https://docs.e3nn.org/en/stable/) software library of Mario Geiger et al., which implements all the building that blocks we will discuss shortly.
+Before we continue, we must give credit where it's due: much of the mathematics we present here has been worked out previously. Our implementation of Steerable E(3) Equivariant Graph Neural Networks (SEGNNs) is built on the excellent [e3nn](https://e3nn.org/) software library of Mario Geiger et al., which implements all the building that blocks we will discuss shortly.
 
 
 # Steerable equivariant message passing
@@ -79,7 +79,7 @@ We'll go over these one by one and try to give an intuitive explanation.
 
 
 ### Steerable vectors
-The essence of our approach is to build graph neural networks equivariant to $$O(3)$$, the group of rotations and reflections. Equivariance to this group is easily extended to $$E(3)$$ by working only with relative distances. We are used to applying elements of $$O(3)$$ to three-dimensional Euclidean vectors, like so: $$\mathbf{x} \rightarrow \mathbf{R}\mathbf{x}$$. However, by using representations of $$O(3)$$ called [Wigher-D matrices](https://docs.e3nn.org/en/stable/api/o3/o3_irreps.html), the group can act on any $$2l+1 $$ dimensional vector space $$V_l$$, as long as this vector space consists of coefficients in a spherical harmonic basis. Any such vector will be called steerable and denoted with a tilde. For example, $$\tilde{\mathbf{h}}^{(l)}$$ is a steerable vector of order/type $$l$$.
+The essence of our approach is to build graph neural networks equivariant to $$O(3)$$, the group of rotations and reflections. Equivariance to this group is easily extended to $$E(3)$$ by working only with relative distances. We are used to applying elements of $$O(3)$$ to three-dimensional Euclidean vectors, like so: $$\mathbf{x} \rightarrow \mathbf{R}\mathbf{x}$$. However, by using representations of $$O(3)$$ called [Wigner-D matrices](https://docs.e3nn.org/en/stable/api/o3/o3_irreps.html), the group can act on any $$2l+1 $$ dimensional vector space $$V_l$$, as long as this vector space consists of coefficients in a spherical harmonic basis. Any such vector will be called steerable and denoted with a tilde. For example, $$\tilde{\mathbf{h}}^{(l)}$$ is a steerable vector of order/type $$l$$.
 
 So what exactly are spherical harmonics? Just like the 1D Fourier basis forms a complete orthonormal basis for 1D functions, the spherical harmonics $$Y^{(l)}_m$$ form an orthonormal basis for $$\mathbb{L}_2(S^2)$$, the space of square integrable functions on the sphere $$S^2$$. Any function on the sphere $$f(\mathbf{n})$$ can thus be represented by a steerable vector when it is expressed in a spherical harmonic basis via:
 
@@ -130,7 +130,7 @@ The Clebsch-Gordan (CG) tensor product  is a sparse tensor product, as generally
 
 In fact, most of us are already familiar with some versions of the Clebsch-Gordan tensor product. For example, combining to type-1 features to form a type-0 feature is simply the dot-product. Combining two type-1 features to create another type-1 feature is the cross product.
 
-By interleaving Clebsch-Gordan products and non-linearities, we can create MLPs for steerable feature vectors. However, the use of non-linearities is somewhat restricted. For type-0 features, one can use any pointwise non-linearity. For higher types, however, the pointwise non-linearities do not commute with the wigner-D matrices, hereby breaking equivariance. We therefore use specially designed [gated non-linearities](https://arxiv.org/pdf/1807.02547.pdf), which map features to scalar values and apply sigmoid gates, somewhat reminiscent of the Swish activation.
+By interleaving Clebsch-Gordan products and non-linearities, we can create MLPs for steerable feature vectors. However, the use of non-linearities is somewhat restricted. For type-0 features, one can use any pointwise non-linearity. For higher types, however, the pointwise non-linearities do not commute with the wigner-D matrices, hereby breaking equivariance. We therefore use specially designed [gated non-linearities](https://arxiv.org/abs/1807.02547), which map features to scalar values and apply sigmoid gates, somewhat reminiscent of the Swish activation.
 
 <!-- The essence of our approach is to build O(3) equivariant graph neural networks
 where O(3) is the group of all rotations and reflections.
@@ -154,7 +154,7 @@ The Clebsch-Gordan product allows for the inclusion of directional information i
 
 The order at which we embed the directional information can be thought of as a spatial resolution. The following animation shows the effect of adding higher order spherical harmonics to the embedding of local geometry, starting from a maximum order of zero up until third order. We consider the maximum order an important hyperparameter.
 
-While there exist methods that can include some directional information into messages, they generally do so by computing angles between neighbours of neighbours, as is done in [DimeNet](https://arxiv.org/abs/2003.03123) and [SphereNet](https://arxiv.org/abs/2102.05013). Many other methods, such as [E(N)GNN](https://arxiv.org/abs/2102.09844), send messages that contain no directional information at all. Being able to directly incorporate this information is a contributor to SEGNNs success.
+While there exist methods that can include some directional information into messages, they generally do so by computing angles between neighbours of neighbours, as is done in [DimeNet](https://arxiv.org/abs/2003.03123) and [SphereNet](https://arxiv.org/abs/2102.05013). Many other methods, such as [EGNN](https://arxiv.org/abs/2102.09844), send messages that contain no directional information at all. Being able to directly incorporate this information is a contributor to SEGNNs success.
 
 ### Steerable E(3) Equivariant Graph Neural Networks
 
