@@ -8,7 +8,8 @@ usemathjax: true
 
 <link rel="stylesheet" href="assets/css/accordion.css">
 
-This is a blog post accompanying the paper [Steerable Equivariant Message Passing on Molecular Graphs](https://arxiv.org/abs/2110.02905). The goal is to give a quick overview of our method, its motivations and its consequences, maybe in a way that is more accesible than in the paper itself. This blog provides us with the space to include some extra figures, which might clarify our approach more thoroughly.
+This is a blog post accompanying the paper [Geometric and Physical Quantities Improve E(3) Equivariant Message Passing
+](https://arxiv.org/abs/2110.02905). The goal is to give a quick overview of our method, its motivations and its consequences, maybe in a way that is more accesible than in the paper itself. This blog provides us with the space to include some extra figures, which might clarify our approach more thoroughly.
 
 
 # Key insights of the paper
