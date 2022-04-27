@@ -10,21 +10,21 @@
     <meta charset="UTF-8">
 
 <!-- Begin Jekyll SEO tag v2.7.1 -->
-<title>Steerable Equivariant Message Passing on Molecular Graphs | align-rudder-blog</title>
+<title>Geometric and Physical Quantities Improve E(3) Equivariant Message Passing | Steerable-E3-GNN</title>
 <meta name="generator" content="Jekyll v3.9.0" />
-<meta property="og:title" content="Steerable Equivariant Message Passing on Molecular Graphs" />
+<meta property="og:title" content="Geometric and Physical Quantities Improve E(3) Equivariant Message Passing" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Blog post" />
 <meta property="og:description" content="Blog post" />
 <link rel="canonical" href="http://localhost:4000/" />
 <meta property="og:url" content="http://localhost:4000/" />
-<meta property="og:site_name" content="align-rudder-blog" />
+<meta property="og:site_name" content="Steerable-E3-GNN" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2021-06-08T17:03:39+02:00" />
+<meta property="article:published_time" content="2022-04-26T00:00:00+02:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Steerable Equivariant Message Passing on Molecular Graphs" />
+<meta property="twitter:title" content="Geometric and Physical Quantities Improve E(3) Equivariant Message Passing" />
 <script type="application/ld+json">
-{"description":"Blog post","headline":"Steerable Equivariant Message Passing on Molecular Graphs","dateModified":"2021-06-08T17:03:39+02:00","datePublished":"2021-06-08T17:03:39+02:00","url":"http://localhost:4000/","@type":"WebSite","name":"align-rudder-blog","@context":"https://schema.org"}</script>
+{"@type":"WebSite","url":"http://localhost:4000/","headline":"Geometric and Physical Quantities Improve E(3) Equivariant Message Passing","dateModified":"2022-04-26T00:00:00+02:00","datePublished":"2022-04-26T00:00:00+02:00","description":"Blog post","name":"Steerable-E3-GNN","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -35,7 +35,7 @@
   <body>
     
     <header class="page-header" role="banner">
-      <h1 class="project-name">Steerable Equivariant Message Passing on Molecular Graphs</h1>
+      <h1 class="project-name">Geometric and Physical Quantities Improve E(3) Equivariant Message Passing</h1>
       <h2 class="project-tagline">Blog post</h2>
       
       
@@ -44,23 +44,13 @@
     <main id="content" class="main-content" role="main">
       <link rel="stylesheet" href="assets/css/accordion.css" />
 
-<p>This is a blog post accompanying the paper <a href="https://arxiv.org/abs/2009.14794">Steerable Equivariant Message Passing on Molecular Graphs</a>. The goal is to give a quick overview of our method, its motivations and its consequences, maybe in a way that is more accesible than in the paper itself. This blog provides us with the space to include some extra figures, which might clarify our approach more thoroughly.</p>
-
-<h1 id="key-insights-of-the-paper">Key insights of the paper</h1>
-
-<p>The paper has three main pillars:</p>
-
-<ol>
-  <li>The introduction of Steerable Equivariant Graph Neural Networks (<strong>SEGNNs</strong>) as <strong>generalisation</strong> of equivariant graph neural networks</li>
-  <li>Showing that SEGNNs are effective on <strong>local graphs</strong> with small cutoff radii</li>
-  <li>Framing of various (equivariant) message passing algorithms in a <strong>unified convolutional form</strong></li>
-</ol>
-
-<p>In this blog post we focus on point 1 and point 2. Point 3 is discussed at length in the paper.</p>
+<p>This is a blog post accompanying the paper <a href="https://arxiv.org/abs/2110.02905">Geometric and Physical Quantities Improve E(3) Equivariant Message Passing
+</a>. The goal is to give a quick overview of our method, its motivations and its consequences, maybe in a way that is more accesible than in the paper itself.
+We also link several ressources which we find helpful not only for understanding the paper, but also for getting acquainted with equivariant graph networks in general.</p>
 
 <h1 id="credit">Credit</h1>
 
-<p>Before we continue, we must give credit where it’s due: much of the mathematics we present here has been worked out previously. Our implementation of Steerable E(3) Equivariant Graph Neural Networks (SEGNNs) is built on the excellent <a href="https://docs.e3nn.org/en/stable/">e3nn</a> software library of Mario Geiger et al., which implements all the building that blocks we will discuss shortly.</p>
+<p>Before we continue, we must give credit where it’s due: much of the mathematics we present here has been worked out previously. Our implementation of Steerable E(3) Equivariant Graph Neural Networks (SEGNNs) is built on the excellent <a href="https://e3nn.org/">e3nn</a> software library of Mario Geiger et al., which implements all the building that blocks we will discuss shortly.</p>
 
 <h1 id="steerable-equivariant-message-passing">Steerable equivariant message passing</h1>
 
@@ -107,7 +97,7 @@ This blog is about the steerable E(3) graph neural network (SEGNN). This model g
 <p>We’ll go over these one by one and try to give an intuitive explanation.</p>
 
 <h3 id="steerable-vectors">Steerable vectors</h3>
-<p>The essence of our approach is to build graph neural networks equivariant to \(O(3)\), the group of rotations and reflections. Equivariance to this group is easily extended to \(E(3)\) by working only with relative distances. We are used to applying elements of \(O(3)\) to three-dimensional Euclidean vectors, like so: \(\mathbf{x} \rightarrow \mathbf{R}\mathbf{x}\). However, by using representations of \(O(3)\) called <a href="https://docs.e3nn.org/en/stable/api/o3/o3_irreps.html">Wigher-D matrices</a>, the group can act on any \(2l+1\) dimensional vector space \(V_l\), as long as this vector space consists of coefficients in a spherical harmonic basis. Any such vector will be called steerable and denoted with a tilde. For example, \(\tilde{\mathbf{h}}^{(l)}\) is a steerable vector of order/type \(l\).</p>
+<p>The essence of our approach is to build graph neural networks equivariant to \(O(3)\), the group of rotations and reflections. Equivariance to this group is easily extended to \(E(3)\) by working only with relative distances. We are used to applying elements of \(O(3)\) to three-dimensional Euclidean vectors, like so: \(\mathbf{x} \rightarrow \mathbf{R}\mathbf{x}\). However, by using representations of \(O(3)\) called <a href="https://docs.e3nn.org/en/stable/api/o3/o3_irreps.html">Wigner-D matrices</a>, the group can act on any \(2l+1\) dimensional vector space \(V_l\), as long as this vector space consists of coefficients in a spherical harmonic basis. Any such vector will be called steerable and denoted with a tilde. For example, \(\tilde{\mathbf{h}}^{(l)}\) is a steerable vector of order/type \(l\).</p>
 
 <p>So what exactly are spherical harmonics? Just like the 1D Fourier basis forms a complete orthonormal basis for 1D functions, the spherical harmonics \(Y^{(l)}_m\) form an orthonormal basis for \(\mathbb{L}_2(S^2)\), the space of square integrable functions on the sphere \(S^2\). Any function on the sphere \(f(\mathbf{n})\) can thus be represented by a steerable vector when it is expressed in a spherical harmonic basis via:</p>
 
@@ -150,7 +140,7 @@ The Clebsch-Gordan (CG) tensor product  is a sparse tensor product, as generally
 
 <p>In fact, most of us are already familiar with some versions of the Clebsch-Gordan tensor product. For example, combining to type-1 features to form a type-0 feature is simply the dot-product. Combining two type-1 features to create another type-1 feature is the cross product.</p>
 
-<p>By interleaving Clebsch-Gordan products and non-linearities, we can create MLPs for steerable feature vectors. However, the use of non-linearities is somewhat restricted. For type-0 features, one can use any pointwise non-linearity. For higher types, however, the pointwise non-linearities do not commute with the wigner-D matrices, hereby breaking equivariance. We therefore use specially designed <a href="https://arxiv.org/pdf/1807.02547.pdf">gated non-linearities</a>, which map features to scalar values and apply sigmoid gates, somewhat reminiscent of the Swish activation.</p>
+<p>By interleaving Clebsch-Gordan products and non-linearities, we can create MLPs for steerable feature vectors. However, the use of non-linearities is somewhat restricted. For type-0 features, one can use any pointwise non-linearity. For higher types, however, the pointwise non-linearities do not commute with the wigner-D matrices, hereby breaking equivariance. We therefore use specially designed <a href="https://arxiv.org/abs/1807.02547">gated non-linearities</a>, which map features to scalar values and apply sigmoid gates, somewhat reminiscent of the Swish activation.</p>
 
 <!-- The essence of our approach is to build O(3) equivariant graph neural networks
 where O(3) is the group of all rotations and reflections.
@@ -173,7 +163,7 @@ embedded into the basis spanned by spherical harmonics are steerable by the Wign
 
 <p>The order at which we embed the directional information can be thought of as a spatial resolution. The following animation shows the effect of adding higher order spherical harmonics to the embedding of local geometry, starting from a maximum order of zero up until third order. We consider the maximum order an important hyperparameter.</p>
 
-<p>While there exist methods that can include some directional information into messages, they generally do so by computing angles between neighbours of neighbours, as is done in <a href="https://arxiv.org/abs/2003.03123">DimeNet</a> and <a href="https://arxiv.org/abs/2102.05013">SphereNet</a>. Many other methods, such as <a href="https://arxiv.org/abs/2102.09844">E(N)GNN</a>, send messages that contain no directional information at all. Being able to directly incorporate this information is a contributor to SEGNNs success.</p>
+<p>While there exist methods that can include some directional information into messages, they generally do so by computing angles between neighbours of neighbours, as is done in <a href="https://arxiv.org/abs/2003.03123">DimeNet</a> and <a href="https://arxiv.org/abs/2102.05013">SphereNet</a>. Many other methods, such as <a href="https://arxiv.org/abs/2102.09844">EGNN</a>, send messages that contain no directional information at all. Being able to directly incorporate this information is a contributor to SEGNNs success.</p>
 
 <h3 id="steerable-e3-equivariant-graph-neural-networks">Steerable E(3) Equivariant Graph Neural Networks</h3>
 
@@ -214,14 +204,13 @@ While previous methods use relatively large cutoff radii of 4.5-11 Å, we use a 
 <p>We hope that SEGNNs grow to be a viable model on many tasks, not merely on molecular data, but all forms of point clouds. We are currently working hard to publish the code so that people can easily apply SEGNNs to their problems. We believe that the effectiveness on local graphs is especially promising for larger structures, such as proteins, since models that operate on fully connected graphs might become too computationally expensive.</p>
 
 <h1 id="material">Material</h1>
-<p>If after you’ve read this, you find yourself hungry for more, we also have a Colab available. That way, you can try out working with SEGNNs yourself!</p>
+<p>If after you’ve read this, you find yourself hungry for more, please check out our github repository where you can find the SEGNN implementation and apply it to your data.</p>
 
-<p><a href="">Paper</a>
-<a href="">Github</a>
-<a href="">Colab</a></p>
+<p><a href="https://github.com/RobDHess/Steerable-E3-GNN">Github</a>
+<a href="https://arxiv.org/abs/2110.02905">Paper</a></p>
 
 <h4 id="correspondence">Correspondence</h4>
-<p>This blog post was written by Rob Hesselink and Johannes Brandstetter. If you have questions about our paper or the blog, please contact us at r.d.hesselink[at]uva.nl or brandstetter[at]ml.jku.at.</p>
+<p>This blog post was written by Johannes Brandstetter and Rob Hesselink. If you have questions about our paper or the blog, please contact brandstetter[at]ml.jku.at.</p>
 
 
       <footer class="site-footer">

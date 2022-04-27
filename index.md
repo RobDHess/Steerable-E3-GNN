@@ -1,26 +1,16 @@
 ---
 layout: default
-title:  "Steerable Equivariant Message Passing on Molecular Graphs"
+title:  "Geometric and Physical Quantities Improve E(3) Equivariant Message Passing"
 description: Blog post
-date:   2021-06-08 17:03:39 +0200
+date:   2022-04-26 
 usemathjax: true
 ---
 
 <link rel="stylesheet" href="assets/css/accordion.css">
 
 This is a blog post accompanying the paper [Geometric and Physical Quantities Improve E(3) Equivariant Message Passing
-](https://arxiv.org/abs/2110.02905). The goal is to give a quick overview of our method, its motivations and its consequences, maybe in a way that is more accesible than in the paper itself. This blog provides us with the space to include some extra figures, which might clarify our approach more thoroughly.
-
-
-# Key insights of the paper
-
-The paper has three main pillars:
-
-1. The introduction of Steerable Equivariant Graph Neural Networks (**SEGNNs**) as **generalisation** of equivariant graph neural networks
-2. Showing that SEGNNs are effective on **local graphs** with small cutoff radii
-3. Framing of various (equivariant) message passing algorithms in a **unified convolutional form**
-
-In this blog post we focus on point 1 and point 2. Point 3 is discussed at length in the paper.
+](https://arxiv.org/abs/2110.02905). The goal is to give a quick overview of our method, its motivations and its consequences, maybe in a way that is more accesible than in the paper itself.
+We also link several ressources which we find helpful not only for understanding the paper, but also for getting acquainted with equivariant graph networks in general.
 
 
 # Credit
@@ -214,4 +204,4 @@ If after you've read this, you find yourself hungry for more, please check out o
 
 
 #### Correspondence
-This blog post was written by Rob Hesselink and Johannes Brandstetter. If you have questions about our paper or the blog, please contact us at r.d.hesselink[at]uva.nl or brandstetter[at]ml.jku.at.
+This blog post was written by Johannes Brandstetter and Rob Hesselink. If you have questions about our paper or the blog, please contact brandstetter[at]ml.jku.at.
