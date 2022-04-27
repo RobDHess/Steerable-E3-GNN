@@ -19,7 +19,9 @@ The codebase was created by Johannes Brandstetter, Rob Hesselink and Erik Bekker
 }
 ```
 
-We have also created an accompanying [blog post](https://robdhess.github.io/Steerable-E3-GNN/), which explains some of the concepts behind the SEGNN in more detail than we could afford in the paper. 
+We have also created an accompanying [blog post](https://robdhess.github.io/Steerable-E3-GNN/).
+
+This blog post contains additional material (Youtube videos, talks, ...) to help you dive further into the subject.
 
 ## SEGNN
 SEGNN is an E(3) steerable graph neural network. It can incorporate vector or tensor-valued information to send directional information, while remaining equivariant to E(3) transformations. We have tried to make the implementation general, so that you may easily apply SEGNN to your data.
