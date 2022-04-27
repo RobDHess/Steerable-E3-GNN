@@ -8,39 +8,28 @@ usemathjax: true
 
 <link rel="stylesheet" href="assets/css/accordion.css">
 
-This is a blog post accompanying the paper [Geometric and Physical Quantities Improve E(3) Equivariant Message Passing
+This is a blog post accompanying the ICLR 2022 spotlight paper [Geometric and Physical Quantities Improve E(3) Equivariant Message Passing
 ](https://arxiv.org/abs/2110.02905). The goal is to give a quick overview of our method, its motivations and its consequences, maybe in a way that is more accesible than in the paper itself.
 We also link several ressources which we find helpful not only for understanding the paper, but also for getting acquainted with equivariant graph networks in general.
 
 
-# Credit
-
-Before we continue, we must give credit where it's due: much of the mathematics we present here has been worked out previously. Our implementation of Steerable E(3) Equivariant Graph Neural Networks (SEGNNs) is built on the excellent [e3nn](https://e3nn.org/) software library of Mario Geiger et al., which implements all the building that blocks we will discuss shortly.
-
-
 # Steerable equivariant message passing
 
-### Motivation: deep learning on molecules
+### Motivation: deep learning on graphs
 
-**NOTE**: the next two subsections serve as an introduction to deep learning for molecules and the concept of equivariance. Readers already familiar with these might wish to skip this section.
+<img src="assets/molecular_graph.png" align="right" width="450"/>
+Deep learning methods have found their place in more and more different types of data. Graphs, point clouds, manifolds and groups all have specialised deep learning tools—with quite some success.
+For example, there is a lot of work ongoing for predicting molecular properties by treating them as graphs.
+In order to do so, atoms are treated as nodes and a cutoff radius defines the edges between them. The larger the cutoff radius, the more connections.
 
-Deep learning methods have found their place in more and more different types of data. Graphs, point clouds, manifolds and groups all have specialised deep learning tools—with quite some succes! For this work, we wish to predict molecular properties by treating them as graphs. In order to do so, we choose treat the atoms as nodes and use a cutoff radius to define edges between them. The larger the cutoff radius, the more connections there will be.
+<img src="assets/gravity.jpg" align="right" width="450"/>
+But there are many more things you can do with graph structured data besides atoms. In this work we also put quite some emphasis on dynamical systems, more precisely on charged 5-body systems obeying the laws of electrodynamics, and also on 100-body systems obeying the laws of gravity. An example of the latter is shown here. For such systems it is crucial to predict individual changes of (relative) positions and of forces for given timesteps accordingly. 
 
-One such molecule is shown in the figure below. The different atom sizes and colours correspond to different atoms and the edges were determined using a cutoff radius of 2Å.
-
-{:refdef: style="text-align: center;"}
-![not found](/assets/molecular_graph.png)
-{: refdef}
-
-One approach for learning on graphs is called [Message Passing](https://arxiv.org/abs/1704.01212v1). It uses a multilayer perceptron (MLP) to compute messages from neighbours, aggregates them and applies yet another MLP to update the central node. This means that the new node feature vector is a highly non-linear function of its neighbours—this is what makes this approach so powerful. Message passing networks have already been shown to match the accuracy of principled density functional theory (DFT) calculations, with far shorter inference times.
+The goal of our paper is to design a flexible and easily to adapt message passing approach, which is maximally expressive due to E(3) equivariance. Furthermore, we want different physical and geometric cues to be easy to integrate into the [message passing](https://arxiv.org/abs/1704.01212v1) scheme. Such cues could be forces, velocities or relative positions.   
 
 ### Equivariance
 
-As any chemist may tell you, the three-dimensional structure of a molecule is of great importance for predicting its properties. However, we should not overfit on the way the molecule is presented to us. For example, the predicting the energy should be invariant to rotations, reflections and translations. For other tasks, such as predicting the force on each atoms, the predictions should rotate as the molecule is rotated. This is the key to equivariance: as the input is transformed, the output transforms _predictably_. Formally, we can say that for any element $$g$$ in some group $$G$$, our function $$\phi$$ satisfies
-
-$$ T'_g[\phi(x)] = \phi(T_g[x])  $$
-
-where $$T$$ and $$T'$$ are the group action in the input space and the output space respectively. This property allows a model to generalise to all possible rotations, while only ever seeing a molecule in a single pose. As one can imagine, this greatly increases data efficiency as it removes the need for showing the molecule under every angle using data augmentation.
+As any chemist may tell you, the three-dimensional structure of a molecule is of great importance for predicting its properties. However, we should not overfit on the way the molecule is presented to us. For example, the predicting the energy should be invariant to rotations, reflections and translations. For other tasks, such as predicting the force on each atoms, the predictions should rotate as the molecule is rotated. This is the key to equivariance: as the input is transformed, the output transforms _predictably_. This property allows a model to generalise to all possible rotations, while only ever seeing a molecule in a single pose. As one can imagine, this greatly increases data efficiency as it removes the need for showing the molecule under every angle using data augmentation.
 
 Approaching this idea with another perspective, we can say that an invariant function _removes_ information—the orientation can no longer be reconstructed from the output. Similarly, an equivariant function _preserves_ information, since all geometric information is preserved throughout the network. This implies that even though the output is invariant, it is beneficial to discard geometric information only at the last possible moment and have all preceding functions be equivariant.
 
@@ -51,12 +40,6 @@ Approaching this idea with another perspective, we can say that an invariant fun
 <!-- ## Steerable E(3) GNN
 This blog is about the steerable E(3) graph neural network (SEGNN). This model generalises existing models, such as the [tensor field fetwork](https://arxiv.org/abs/1802.08219), the [SE(3) transformer](https://arxiv.org/abs/2006.10503) and especially the [E(N)GNN](https://arxiv.org/abs/2102.09844). Instead of using standard Euclidean feature vectors, the SEGNN produces features that are coefficients of steerable functions: _spherical harmonics_. Spherical harmonics are functions that live on the sphere $$S^2$$. -->
 
-### Equivariance for vector (or tensor) valued features
-
-
-In this work, we want to go one step further. We want to sustain equivariance if information at nodes or edges is vector or tensor valued. This means that as a molecule rotates, so do the vectors at each node. A good example is force prediction, where we want the three-dimensional output vector to behave equivariantly. SEGNNs achieve this by representing nodes and messages as steerable vectors as explained in the next section.
-
-
 
 
 # SEGNN builing blocks
@@ -64,7 +47,7 @@ Let's take a look at how to build a Steerable E(3) GNN. For a short overview, we
 
 * **Steerable feature vectors**, which are equivariant with respect to the transformation group of rotations and reflections.
 * The **Clebsch-Gordan tensor product**, the workhorse of our method, analogous to the linear transform in standard MLPs.
-* Including **relative positions** into the Clebsch-Gordan tensor product to build a more powerful message passing scheme.
+* Including **physical and geometric cues** into the Clebsch-Gordan tensor product to build a more powerful message and node update layers.
 
 We'll go over these one by one and try to give an intuitive explanation.
 
@@ -79,7 +62,7 @@ f(\mathbf{n}) = \sum_{l\geq 0} \sum_{m=-l}^l h_m^{(l)} Y_m^{(l)}(\mathbf{n}) \ .
 \label{eq1}\tag{1}
 $$
 
-We visualize such functions on $$S^2$$ via glyph-visualizations by stretching and colour-coding a sphere based on the function value $$f(\mathbf{n})$$. The figure below shows such a glyph plot.
+We visualise such functions on $$S^2$$ via glyph-visualizations by stretching and colour-coding a sphere based on the function value $$f(\mathbf{n})$$. The figure below shows such a glyph plot.
 
 ![not found](/assets/single_harmonic.png){:width="410px" style="float: right"}
 
@@ -139,14 +122,6 @@ In the appendix of our paper, we show that the mapping from vectors into spheric
 embedded into the basis spanned by spherical harmonics are steerable by the Wigner D-matrices. -->
 
 
-### Including relative positions
-
-The Clebsch-Gordan product allows for the inclusion of directional information in messages and updates. Reminding ourselves that it takes two steerable vectors as input, we can concatenate the features and distance between sender and receiver to form one input $$ \tilde{\mathbf{f}}_i \oplus \tilde{\mathbf{f}}_j \oplus \lVert \mathbf{x}_j - \mathbf{x}_i \rVert^2 $$ and use a spherical harmonic embedding of the relative position $$\tilde{\mathbf{a}}_{ij}$$ as the other input. Similarly, when can update node features using the average relative position to neighbours denoted by $$\tilde{\mathbf{a}}_i$$. This endows messages with a sense of direction and endows nodes with a sense for the local geometry.
-
-The order at which we embed the directional information can be thought of as a spatial resolution. The following animation shows the effect of adding higher order spherical harmonics to the embedding of local geometry, starting from a maximum order of zero up until third order. We consider the maximum order an important hyperparameter.
-
-While there exist methods that can include some directional information into messages, they generally do so by computing angles between neighbours of neighbours, as is done in [DimeNet](https://arxiv.org/abs/2003.03123) and [SphereNet](https://arxiv.org/abs/2102.05013). Many other methods, such as [EGNN](https://arxiv.org/abs/2102.09844), send messages that contain no directional information at all. Being able to directly incorporate this information is a contributor to SEGNNs success.
-
 ### Steerable E(3) Equivariant Graph Neural Networks
 
 Let's see what the SEGNN actually looks like in practice. Consider a graph $$\mathcal{G} =(\mathcal{V},\mathcal{E})$$, with nodes $$v_i \in \mathcal{V}$$ and edges $$e_{ij} \in \mathcal{E}$$.
@@ -167,41 +142,42 @@ where $$\mathcal{N}(i)$$ represents the set of neighbours of node $$v_i$$, and $
 {: refdef}
 
 
-# Experiments
+### Injecting Geometric and Physical Cues
 
-### QM9 experiment
-
-One of our key insights while looking at the QM9 dataset was that using SEGNNs allows us to operate on graphs with small cutoff radius, (local graphs). By sending directional messages, the model is able to leverage molecular structure, which many other models cannot do. Operating on local graphs results in a sharp reduction of the number of messages per layer, as shown in the figure below.
-While previous methods use relatively large cutoff radii of 4.5-11 Å, we use a cutoff radius of 2 Å. The following figures show the effects of this, showing the growing number of connections on the left and on the right the mean number of messages per cutoff radius, including standard deviation over the QM9 train partition. Note that there exists a minimum cutoff radius, at the transition from disconnected to disconnected graphs.
-
-{:refdef: style="text-align: center;"}
-![not found](/assets/edges.gif){:width="380px"}
-![not found](/assets/radius.png){:width="440px"}
-{: refdef}
-
-
-### OC20 challenge
-
-The [Open Catalyst Project](https://opencatalystproject.org/index.html) of Facebook AI Research (FAIR) and Carnegie Mellon University’s (CMU) Department of Chemical Engineering consists of molecular adsorptions onto catalyst surfaces. We participate in the initial structure to relaxed energy (IS2RE). The catalyst consists of three layers of atoms with periodic boundaries and a small adsorbate molecule that relaxes onto the adsorbate. This is a much more challenging task than energy prediction on QM9, because additionally the equilibrium state needs to be taken into account—although we predict energy directly from the initial states, without updating positions.   
-
-The adsorbates are made up out of light atoms where 82 different adsorbats are considered. As seen on the animation below, taken from the [Open Catalyst Project website](https://opencatalystproject.org/index.html), the adsorbates have rotation, translation and permutation symmetries. SEGNNs are ideally suited for solving such tasks and perform very well. Have a look at the [Open Catalyst Project Leaderboard](https://opencatalystproject.org/leaderboard_is2re.html). It contains both in-distribution and out-of-distribution categories, which are far more challenging.
-
-We want to note that the SEGNN was trained on the "small" dataset, consisting of 460.000 samples. Other methods in the leaderboard use the large dataset, which has 138.000.000 samples. As far as we are able to tell, we have the leading entry for methods on this smaller dataset. Unfortunately, we do not possess the computational resources to train a model on the larger dataset. If you happen to have them, feel free to give it a try!
-
-{:refdef: style="text-align: center;"}
-![not found](/assets/OC20.gif){:width="400px"}
-{: refdef}
-
-# Conclusion
-We hope that SEGNNs grow to be a viable model on many tasks, not merely on molecular data, but all forms of point clouds. We are currently working hard to publish the code so that people can easily apply SEGNNs to their problems. We believe that the effectiveness on local graphs is especially promising for larger structures, such as proteins, since models that operate on fully connected graphs might become too computationally expensive.
-
+In order to make SEGNNs more expressive, we include geometric and physical information in the edge and node updates.
+For that purpose, the edge attributes $$\tilde{\mathbf{a}}_{ij}$$ are obtained via the spherical harmonic embedding of relative positions, in most cases, but possibly also relative force or relative momentum.
+The node attributes could e.g. be the average edge embedding of relative positions over neighbours of a node, i.e., 
+$$\tilde{\mathbf{a}}_i = \frac{1}{\lvert \mathcal{N}(i)  \rvert} \sum_{j \in \mathcal{N}(i)} \tilde{\mathbf{a}}_{ij}$$, and could additionally include node force, spin or velocities, as we do in the N-body experiment.
+The use of steerable node attributes in the steerable node update MLPs allows us to not just integrate geometric cues into the message functions, but also leverage it in the node updates.  
+We observe that the more geometric and physical quantities are injected the better SEGNNs perform.
 
 # Material
-If after you've read this, you find yourself hungry for more, please check out our github repository where you can find the SEGNN implementation and apply it to your data.
 
-[Github](https://github.com/RobDHess/Steerable-E3-GNN)
-[Paper](https://arxiv.org/abs/2110.02905)
+### Code
+If after you've read this, you find yourself hungry for more, please check out our [Github](https://github.com/RobDHess/Steerable-E3-GNN) repository where you can find the SEGNN implementation and apply it to your data. You can find the [vanilla SEGNN model](https://github.com/RobDHess/Steerable-E3-GNN/blob/main/models/segnn/segnn.py) and its [different building blocks](https://github.com/RobDHess/Steerable-E3-GNN/blob/main/models/segnn/o3_building_blocks.py).
 
 
-#### Correspondence
-This blog post was written by Johannes Brandstetter and Rob Hesselink. If you have questions about our paper or the blog, please contact brandstetter[at]ml.jku.at.
+### Slides
+[ICLR 2022 spotlight poster](https://github.com/RobDHess/Steerable-E3-GNN/blob/main/assets/SEGNN_poster.png)
+
+[Accompanying slides](https://github.com/RobDHess/Steerable-E3-GNN/blob/main/assets/SEGNN_slides.pdf)
+
+### Videos
+Johannes and Erik were invited to present the paper in the GraphML reading group: \\
+[Youtube video of GraphML reading group, March 15 2022](https://www.youtube.com/watch?v=jKXMgaC1oHE).
+
+Have a look at [Erik's Youtube playlist on Group Equivariant Deep Learning](https://www.youtube.com/playlist?list=PL8FnQMH2k7jzPrxqdYufoiYVHim8PyZWd):
+Especially:
+
+- [Lecture 3.5 on non-linear steerable graph NNs](https://www.youtube.com/watch?v=CIoXyqDfeok)
+
+- [Lecture 3.6 on non-linear regular graph/group CNNs](https://www.youtube.com/watch?v=PbLRvOri_KM)
+
+
+# Credit
+
+Our implementation of Steerable E(3) Equivariant Graph Neural Networks (SEGNNs) is built on the excellent [e3nn](https://e3nn.org/) software library of Mario Geiger et al., which allows us to implement all the building that blocks in our paper.
+
+
+# Correspondence
+If you have questions about our paper or the blog, please contact brandstetter[at]ml.jku.at.
